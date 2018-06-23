@@ -248,24 +248,24 @@ of the far detector is taken into account.
 
 ## License
 
-    Copyright (C) 2018  Pintaudi Giorgio <giorgio-pintaudi-kx_AT_ynu_DOT_jp>
+Copyright (C) 2018  Pintaudi Giorgio <giorgio-pintaudi-kx_AT_ynu_DOT_jp>
 
-    This file is part of nu-vs-antinu.
-    nu-vs-antinu is a simple program that produces a graph to quickly estimate 
+This file is part of nu-vs-antinu.
+nu-vs-antinu is a simple program that produces a graph to quickly estimate 
 the sensibility of a given experiment to the neutrino mass hierarchy.
 
-    nu-vs-antinu is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    any later version.
+nu-vs-antinu is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
 
-    nu-vs-antinu is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+nu-vs-antinu is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with nu-vs-antinu.  If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with nu-vs-antinu.  If not, see <https://www.gnu.org/licenses/>.
 
 
 
