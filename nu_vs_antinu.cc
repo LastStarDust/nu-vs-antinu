@@ -298,7 +298,7 @@ int main(int argc, char * argv[] )
     bNu->propagateLinear( 1, distance, density );
 
     total_prob = 0;
-    for( j = 1; j <= 3; j++) total_prob += bNu->GetProb(-2, j);
+    for( j = 1; j <= 3; j++) total_prob += bNu->GetProb(2, j);
     if ( total_prob >1.00001 || total_prob<0.99998 )
       {
 	std::cerr << "  ERROR (i = " << i << ") - Prob: " << total_prob
@@ -406,7 +406,11 @@ int main(int argc, char * argv[] )
 
   /* The following code just creates 8 graphs each containing only 2 points.
      These points correspond to the values of delta: 0, 1/2 pi, pi, 3/2 pi.
-     Each graph is in common with the lower and upper octants */
+     Each graph is in common with the lower and upper octants.
+     Actually the Prob3++ defines delta as going from -pi to pi so, to recover
+     the standard dominion of definition [0,2pi] we will need to add a fixed pi
+     phase when drawing the graph.
+*/
 
   // delta = 0 - Normal hierarchy
   
