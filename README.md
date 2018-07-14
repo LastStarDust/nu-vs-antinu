@@ -254,7 +254,9 @@ of the far detector is taken into account.
 
 ## TO-DO
 
- - [ ] Normalize the probabilities.
+ - [ ] Add a way to specify the spread in energy of the flux.
+ - [ ] Include detector sensibility
+ - [ ] Include experimental point for T2K
 
 ## License
 
