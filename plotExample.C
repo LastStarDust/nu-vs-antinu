@@ -67,7 +67,7 @@
   // c5->SetTopMargin(0.153226);
   // c5->SetRightMargin(0.153226);
   c5->SetFillColor(kWhite);
-  c5->SetLogx(1);
+  //c5->SetLogx(1);
 	
   _NuMuToNuE_Length->GetXaxis()->SetTitleSize(0.03);
   _NuMuToNuE_Length->GetXaxis()->SetTitleOffset(1.3);

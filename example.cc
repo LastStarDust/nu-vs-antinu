@@ -66,7 +66,7 @@ int main(int argc, char * argv[] )
   double DM21    = DELTA_M21; // in eV
   double DM32 = 2.50e-3; // in eV
 
-  double delta_degrees = 0.;
+  double delta_degrees = 0; // T2K best fit
   double delta; // CP violation phase expressed in radiants
 
   /***** Density *****/
@@ -184,44 +184,27 @@ int main(int argc, char * argv[] )
   //// Binning     
   int NBinsEnergy = 100000;
   int NBinsPath   = 100000; 
-  int NBinsLoE = 10000;
-
-  /***** ??? *****/
-  // ???
-  double LoEEdge[ NBinsLoE +1 ];
-  double loe_start = 10.0;
-  double loe_end = 4.0e3;
-  double loe_step = log10( loe_end / loe_start )/double(NBinsLoE);
-  // Log Scale
-
-  // ???
-  LoEEdge[0]= loe_start;
-  for ( i=1; i <= NBinsLoE; i++ ){
-    Entry = loe_start*pow(10.0, double(i)*loe_step) ;
-    LoEEdge[i] = Entry;
-  }
-  TH1D * LoE = new TH1D("loe", "", NBinsLoE, LoEEdge );
   
   /***** Path Length *****/
   // The unit of measure is Km
   double PathLengthEdge[NBinsPath+1];
-  double BasePath = 295.0; // The T2K path length is approximately 295 Km
-  double path_start = 0.1;
-  double path_end = 1000.0;
-  double path_step = log10( path_end/path_start)/double(NBinsPath);
-  // Log Scale
+  double BasePath = 810.0; // The T2K path length is approximately 295 Km and NOvA is 810 Km
+  double path_start = 0;
+  double path_end = 2000.0;
+  double path_step = (path_end - path_start)/double(NBinsPath);
+  // Linear Scale
 
   // Populate the Path histogram horizontal-axis
   PathLengthEdge[0]= path_start;
   for ( i=1; i <= NBinsPath; i++ ){
-    Entry = path_start * pow( 10.0, double(i)*path_step );
+    Entry = path_start + double(i)*path_step;
     PathLengthEdge[i] = Entry;
   }
 
   /***** Energy Range *****/
   // The unit of measure is GeV
   double EnergyBins[NBinsEnergy+1];
-  double BaseEnergy = 0.850; // T2K mean neutrino flux energy is 850 MeV  
+  double BaseEnergy = 2; // T2K mean neutrino flux energy is 600 MeV  
   double e_start = 1.0e-3; // 1MeV 
   double e_end  =  10.0  ; // 10 GeV
   double e_step = log10(e_end/e_start)/double(NBinsEnergy);
@@ -240,20 +223,20 @@ int main(int argc, char * argv[] )
   ///////////////////////////
   /// mu to E 
   ssE.str("");
-  ssE <<  "P(#nu_{#mu} #rightarrow #nu_{e})" << " L = " << BasePath; 
+  ssE <<  "P(#nu_{#mu} #rightarrow #nu_{e})" << " L = " << BasePath << " Km"; 
   ssL.str("");
-  ssL <<  "P(#nu_{#mu} #rightarrow #nu_{e})" << " E = " << BaseEnergy; 
+  ssL <<  "P(#nu_{#mu} #rightarrow #nu_{e})" << " E = " << BaseEnergy << " GeV"; 
   TH1D * lmu2eE =
-    new TH1D("lmu2eE", ssL.str().c_str() , NBinsEnergy, EnergyBins );
+    new TH1D("lmu2eE", ssE.str().c_str() , NBinsEnergy, EnergyBins );
   TH1D * lmu2eL =
     new TH1D("lmu2eL", ssL.str().c_str() , NBinsPath, PathLengthEdge );
 
   ///////////////////////////
   /// mu to mu 
   ssE.str("");
-  ssE <<  "P(#nu_{#mu} #rightarrow #nu_{#mu})" << " L = " << BasePath ; 
+  ssE <<  "P(#nu_{#mu} #rightarrow #nu_{#mu})" << " L = " << BasePath << " Km"; 
   ssL.str("");
-  ssL <<  "P(#nu_{#mu} #rightarrow #nu_{#mu})" << " E = " << BaseEnergy; 
+  ssL <<  "P(#nu_{#mu} #rightarrow #nu_{#mu})" << " E = " << BaseEnergy << " GeV";
   TH1D * lmu2muE =
     new TH1D("lmu2muE", ssE.str().c_str() , NBinsEnergy, EnergyBins );
   TH1D * lmu2muL =
@@ -262,9 +245,9 @@ int main(int argc, char * argv[] )
   ///////////////////////////
    /// mu to tau 
   ssE.str("");
-  ssE <<  "P(#nu_{#mu} #rightarrow #nu_{#tau})" << " L = " << BasePath ; 
+  ssE <<  "P(#nu_{#mu} #rightarrow #nu_{#tau})" << " L = " << BasePath << " Km"; 
   ssL.str("");
-  ssL <<  "P(#nu_{#mu} #rightarrow #nu_{#tau})" << " E = " << BaseEnergy; 
+  ssL <<  "P(#nu_{#mu} #rightarrow #nu_{#tau})" << " E = " << BaseEnergy << " GeV";
   TH1D * lmu2tauE =
     new TH1D("lmu2tauE", ssE.str().c_str() , NBinsEnergy, EnergyBins );
   TH1D * lmu2tauL =
@@ -286,6 +269,9 @@ int main(int argc, char * argv[] )
   BargerPropagator   * bNu;
   bNu = new BargerPropagator( );
   bNu->UseMassEigenstates( false );
+
+  /* The following loop spans all the energy range for Baseline given by
+     Base_Path. The energy is "scanned" logarithmically. */
   
   for ( i = 0 ; i <= NBinsEnergy ; i++ )
     {
@@ -311,9 +297,12 @@ int main(int argc, char * argv[] )
       }
     } // End Energy Loop //
 
-  for ( i = 0 ; i <= NBinsPath ; i ++ ) 
+  /* The following loop spans the baseline for a energy given by
+     BaseEnergy. The range is "scanned" linearly. */
+  
+  for ( i = 0 ; i < NBinsPath ; i++ ) 
     {
-      path = path_start*pow(10.0, double(i)*path_step ); 
+      path = path_start + double(i)*path_step;
       bNu->SetMNS( theta12, theta13, theta23, DM21, DM32, delta,
 		   BaseEnergy, kSquared, mode ); 
       bNu->propagateLinear( 1*mode, path, Density );
@@ -325,13 +314,6 @@ int main(int argc, char * argv[] )
       }
     } // End Path Loop //
 
-  double loe;
-  for ( i = 0 ; i <= NBinsLoE ; i ++ ) 
-    {
-      loe = loe_start* pow(10.0, double(i)*loe_step ); 
-      LoE->Fill( loe , 1.0 - pow(sin( loe * 1.2667 * DM32 ), 2) );     
-    }
-
   /////
   // Write the output
   TFile *tmp = new TFile("example.root", "recreate");
@@ -341,7 +323,6 @@ int main(int argc, char * argv[] )
      histos[j][0]->Write();     
      histos[j][1]->Write();     
   }
-  LoE->Write();
 
   tmp->Close();
 
